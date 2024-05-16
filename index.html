@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Secret</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #333;
+            color: #ff0000;
+            flex-direction: column;
+            text-align: center;
+        }
+        #mission {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        #countdown {
+            text-align: center;
+        }
+        #countdown div {
+            font-size: 2em;
+            margin: 10px;
+            display: inline-block;
+            background: #111;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ff0000;
+        }
+        #countdown div span {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="mission">
+        Agent Sven, Ihre Mission: Lösen Sie die Aufgabe vor Ablauf des Countdowns.
+    </div>
+    <div id="countdown">
+        <!-- Placeholder elements for countdown -->
+    </div>
+
+    <script>
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        function updateMissionText() {
+            var missionDiv = document.getElementById("mission");
+            var taskNumber = getParameterByName('task');
+
+            if (taskNumber) {
+                missionDiv.innerHTML = `Agent Sven, Ihre Mission: Lösen Sie Aufgabe ${taskNumber} vor Ablauf des Countdowns.`;
+            } else {
+                missionDiv.innerHTML = "Agent Sven, Ihre Mission: Lösen Sie die Aufgabe vor Ablauf des Countdowns.";
+            }
+        }
+
+        function updateCountdown() {
+            var countdownDiv = document.getElementById("countdown");
+
+            // Get the countdown date from the URL parameter
+            var dateParam = getParameterByName('date');
+            var countDownDate = new Date(dateParam).getTime();
+
+            if (isNaN(countDownDate)) {
+                countdownDiv.innerHTML = "Ungültiges Datum. Verwenden Sie das Format ?date=YYYY-MM-DDTHH:MM:SS.";
+                return;
+            }
+
+            // Update the count down every 1 second
+            var x = setInterval(function() {
+
+                // Get today's date and time
+                var now = new Date().getTime();
+
+                // Find the distance between now and the count down date
+                var distance = countDownDate - now;
+
+                // Time calculations for days, hours, minutes and seconds
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Clear the countdown div
+                countdownDiv.innerHTML = '';
+
+                // Display days if greater than 0
+                if (days > 0) {
+                    var daysDiv = document.createElement('div');
+                    daysDiv.innerHTML = `<span>${days}</span> Tage`;
+                    countdownDiv.appendChild(daysDiv);
+                }
+
+                // Display hours if greater than 0
+                if (hours > 0) {
+                    var hoursDiv = document.createElement('div');
+                    hoursDiv.innerHTML = `<span>${hours}</span> Stunden`;
+                    countdownDiv.appendChild(hoursDiv);
+                }
+
+                // Display minutes if greater than 0
+                if (minutes > 0) {
+                    var minutesDiv = document.createElement('div');
+                    minutesDiv.innerHTML = `<span>${minutes}</span> Minuten`;
+                    countdownDiv.appendChild(minutesDiv);
+                }
+
+                // Always display seconds
+                var secondsDiv = document.createElement('div');
+                secondsDiv.innerHTML = `<span>${seconds}</span> Sekunden`;
+                countdownDiv.appendChild(secondsDiv);
+
+                // If the count down is over, write some text
+                if (distance < 0) {
+                    clearInterval(x);
+                    countdownDiv.innerHTML = "ZEIT ABGELAUFEN: Beginnen Sie umgehend mit der nächsten Mission!";
+                }
+            }, 1000);
+        }
+
+        updateMissionText();
+        updateCountdown();
+    </script>
+</body>
+</html>
