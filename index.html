@@ -60,14 +60,18 @@
         }
 
         function sanitizeInput(input) {
-            return input.replace(/[^a-zA-Z0-9]/g, '');
+            return input.replace(/[^a-zA-Z0-9äöüßÄÖÜ]/g, '');
         }
 
         function updateMissionText() {
             var missionDiv = document.getElementById("mission");
             var taskNumber = getParameterByName('task');
             var agentName = getParameterByName('agent') || 'X';  // Default to 'X' if no name is provided
-
+            
+            // Sanitize only if the parameter is not null
+            if (taskNumber !== null) {
+                taskNumber = sanitizeInput(taskNumber);
+            }
             taskNumber = sanitizeInput(taskNumber);
             agentName = sanitizeInput(agentName);
 
