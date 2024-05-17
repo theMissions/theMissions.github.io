@@ -42,7 +42,7 @@
 </head>
 <body>
     <div id="mission">
-        Agent Sven, Ihre Mission: Lösen Sie die Aufgabe vor Ablauf des Countdowns.
+        <!-- Mission text will be set by JavaScript -->
     </div>
     <div id="countdown">
         <!-- Placeholder elements for countdown -->
@@ -62,11 +62,12 @@
         function updateMissionText() {
             var missionDiv = document.getElementById("mission");
             var taskNumber = getParameterByName('task');
+            var agentName = getParameterByName('agent') || 'X';  // Default to 'X' if no name is provided
 
             if (taskNumber) {
-                missionDiv.innerHTML = `Agent Sven, Ihre Mission: Lösen Sie Aufgabe ${taskNumber} vor Ablauf des Countdowns.`;
+                missionDiv.innerHTML = `Agent ${agentName}, Ihre Mission: Lösen Sie Aufgabe ${taskNumber} vor Ablauf des Countdowns.`;
             } else {
-                missionDiv.innerHTML = "Agent Sven, Ihre Mission: Lösen Sie die Aufgabe vor Ablauf des Countdowns.";
+                missionDiv.innerHTML = `Agent ${agentName}, Ihre Mission: Lösen Sie die Aufgabe vor Ablauf des Countdowns.`;
             }
         }
 
